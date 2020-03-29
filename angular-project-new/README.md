@@ -31,7 +31,7 @@
 * Add the last task by searching for **publish** and add the task **Publish build artifacts** from the list of available options. In this task, you do not need to modify are configure anything.
 * The final output of the pipeline looks like below
 
- [](images/pipeline.png)
+ ![](images/pipeline.png)
 
 * Now use the **Save & Queue** button.
 
