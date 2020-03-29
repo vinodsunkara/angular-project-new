@@ -1,27 +1,61 @@
-# AngularProjectNew
+## Create a VSTS CI/CD pipeline for an Angular Application 
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.19.
+### CI Pipeline for an Angular Application
 
-## Development server
+* Select the **Pipelines** from the left side menu in your project and click on the **New Pipeline** button.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+ ![](images/new-pipeline.png)
 
-## Code scaffolding
+* Select the ***Use the classic editor*** to create a pipeline
+* Select the Source, Repository and the branch from which you want the application to build and click ***Continue***
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+ ![](images/repository.png)
 
-## Build
+* Select the empty job option at the top.
+* Now add a task as shown below.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+ ![](images/task.png)
 
-## Running unit tests
+* Search for `npm` and then add the npm task to the pipeline
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+ ![](images/npm.png)
 
-## Running end-to-end tests
+* Click on the newly-created npm task and under the command, select `Install` and configure the Working folder that contains package.json
+* Right click on the `npm` task and select ***Clone task(s)*** to create a similar task
+* This time select the custom option for command and rename the task to `npm build`
+* In the Command and arguments use  `run build`  or if you are using `--prod` then use `run build-prod` based on your package.json of your application. 
+* Configure the Working folder that contains package.json for `npm build` task as well.
+* Add another task and search for `Archive files`. This task is use to create an archive file from a source folder.
+* In the `Root folder or file to archive` use `$(System.DefaultWorkingDirectory)/dist/project-name` ***(replace the "project-name" with your project name)***
+* ***$(System.DefaultWorkingDirectory)*** is basically a local path on the agent where your source code files are downloaded and compiled (Example: c:\agent_work\1\s)
+* Add the last task by searching for **publish** and add the task **Publish build artifacts** from the list of available options. In this task, you do not need to modify are configure anything.
+* The final output of the pipeline looks like below
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+ [](images/pipeline.png)
 
-## Further help
+* Now use the **Save & Queue** button.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+### CD Pipeline (Deploying an Angluar application to the Azure App Service)
+
+* First, please log into you Azure Portal and create a new Web App with a name of your choice.
+* Select **Releases** and from the left side menu in your project and click on the **New Release Pipeline** 
+* Select **Azure App Service Deployment** template and click Apply to get our artifact and drop it to Azure
+
+ ![](images/app-service.png)
+
+* Select **Add an artifact** to configure the CI pipeline connection
+* Artifact is basically a .zip (compilation of your code) file which we created in CI pipeline.
+* So as a source we will select the build definition which produces the artifact as an output.
+
+ ![](images/atrifact.png)
+
+* If you click on the **1 job, 1 Task** link it will redirect you to a page where we can take a closer look on what should be done with the artifact. 
+
+ ![](images/job-task.png)
+
+* Configure all the Azure Details (Subscription, app type, and app service name)
+
+ ![](images/subscription.png)
+
+* Click **Save & Queue** to trigger the build deployment.
