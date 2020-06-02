@@ -26,7 +26,7 @@
 * In the Command and arguments use  `run build`  or if you are using `--prod` then use `run build-prod` based on your package.json of your application. 
 * Configure the Working folder that contains package.json for `npm build` task as well.
 * Add another task and search for `Archive files`. This task is use to create an archive file from a source folder.
-* In the `Root folder or file to archive` use `$(System.DefaultWorkingDirectory)/dist/project-name` ***(replace the "project-name" with your project name)***
+* In the `Root folder or file to archive` use `$(System.DefaultWorkingDirectory)/project-name/dist/project-name` ***(replace the "project-name" with your project name)***
 * ***$(System.DefaultWorkingDirectory)*** is basically a local path on the agent where your source code files are downloaded and compiled (Example: c:\agent_work\1\s)
 * Add the last task by searching for **publish** and add the task **Publish build artifacts** from the list of available options. In this task, you do not need to modify are configure anything.
 * The final output of the pipeline looks like below
